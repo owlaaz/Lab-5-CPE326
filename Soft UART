@@ -1,0 +1,23 @@
+char i, error, uart_rd;
+// Soft UART connections
+sbit Soft_UART_Rx_Pin at PINB.B0;
+sbit Soft_UART_Tx_Pin at PORTB.B1;
+sbit Soft_UART_Rx_Pin_Direction at DDRB.B0;
+sbit Soft_UART_Tx_Pin_Direction at DDRB.B1;
+// End Soft UART connections
+
+void main(){
+  DDRB=0xFF;
+  UART1_Init(9600);               // Initialize UART module at 9600 bps
+  Delay_ms(100);                  // Wait for UART module to stabilize
+  // Initialize Software UART communication at 9600 bps.
+  Soft_UART_Init(9600, 0);
+  while (1) {                     // Endless loop
+   if (UART1_Data_Ready()== 1) {      // If data is received,
+     uart_rd = UART1_Read();      // read the received data,
+    Soft_UART_Write(uart_rd);
+    Delay_ms(100);
+    }
+  }
+
+ }
